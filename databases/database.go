@@ -1,4 +1,8 @@
 // Interface
 package databases
 
-type Database interface{}
+import "gorm.io/gorm"
+
+type Database interface {
+	ConnectionGetting() *gorm.DB
+}
