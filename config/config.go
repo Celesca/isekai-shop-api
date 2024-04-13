@@ -1,6 +1,13 @@
 package config
 
-import "time"
+import (
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/spf13/viper"
+)
 
 // สิ่งที่เปลี่ยนแปลงได้ตลอดเวลา deploy ขึ้น cloud
 
@@ -52,3 +59,44 @@ type (
 		Schema   string `mapstructure:"schema" validate:"required"`
 	}
 )
+
+// Singleton Pattern จะต้องมี Instance เดียว เวลา Start App จะโหลดแค่ครั้งเดียว
+// จะไม่มีการโหลดอีกแล้ว แม้จะมีการเรียกใช้อีกรอบกก็ตาม
+
+var (
+	once           sync.Once
+	configInstance *Config
+)
+
+func ConfigGetting() *Config {
+	once.Do(func() {
+		viper.SetConfigName("config")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath("./config")
+		viper.AutomaticEnv()
+
+		// ตอนจะ Deploy ขึ้น Could เราจะเป็น SERVER_PORT แทน server.port
+		// Build once deploy multiple in different environment
+		// server.port -> SERVER_PORT
+		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+		if err := viper.ReadInConfig(); err != nil {
+			panic(err)
+		}
+
+		// from config.yaml to json and map to struct
+
+		if err := viper.Unmarshal(&configInstance); err != nil {
+			panic(err)
+		}
+
+		// Validate
+
+		validating := validator.New()
+
+		if err := validating.Struct(configInstance); err != nil {
+			panic(err)
+		}
+	})
+	return configInstance
+}
