@@ -2,10 +2,9 @@ package entities
 
 import "time"
 
-type Inventory struct {
+type PlayerCoin struct {
 	ID        uint64    `gorm:"primaryKey;autoIncrement;"`
 	PlayerID  string    `gorm:"type:varchar(64);not null;"`
-	ItemID    uint64    `gorm:"type:bigint;not null;"`
-	IsDeleted bool      `gorm:"not null;default:false;"`
+	Amount    int64     `gorm:"not null;"`
 	CreatedAt time.Time `gorm:"autoCreateTime;not null;"`
 }
