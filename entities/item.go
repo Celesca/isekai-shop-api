@@ -1,6 +1,10 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
+)
 
 type Item struct {
 	ID          uint64    `gorm:"primaryKey;autoIncrement"`
@@ -15,3 +19,16 @@ type Item struct {
 }
 
 // Note : IsArchive is used to soft delete. It doesn't actually delete the data from the database. for recovered
+
+// Entity to Model
+
+func (i *Item) ToItemModel() *_itemShopModel.Item {
+	return &_itemShopModel.Item{
+		ID:          i.ID,
+		Name:        i.Name,
+		Description: i.Description,
+		Picture:     i.Picture,
+		Price:       i.Price,
+	}
+
+}
