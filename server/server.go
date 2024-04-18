@@ -42,7 +42,6 @@ func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
 			conf: conf,
 		}
 	})
-
 	return server
 
 }
@@ -97,9 +96,6 @@ func (s *echoServer) healthCheck(c echo.Context) error {
 }
 
 // Middleware
-func getLoggerMiddleware() echo.MiddlewareFunc {
-	return middleware.Logger()
-}
 
 func getTimeOutMiddleware(timeout time.Duration) echo.MiddlewareFunc {
 	return middleware.TimeoutWithConfig(middleware.TimeoutConfig{

@@ -2,18 +2,16 @@ package entities
 
 import "time"
 
-type (
-	Item struct {
-		ID          uint64    `gorm:"primaryKey;autoIncrement;"`
-		AdminID     *string   `gorm:"type:varchar(64);"`
-		Name        string    `gorm:"type:varchar(64);unique;not null;"`
-		Description string    `gorm:"type:varchar(128);not null;"`
-		Picture     string    `gorm:"type:varchar(256);not null;"`
-		Price       uint      `gorm:"not null;"`
-		IsArchive   bool      `gorm:"not null;default:false;"`
-		CreatedAt   time.Time `gorm:"autoCreateTime;not null;"`
-		UpdatedAt   time.Time `gorm:"autoUpdateTime;not null;"`
-	}
-)
+type Item struct {
+	ID          uint64    `gorm:"primaryKey;autoIncrement"`
+	AdminID     *string   `gorm:"type:varchar(64);"`
+	Name        string    `gorm:"type:varchar(64);unique;not null;"`
+	Description string    `gorm:"type:varchar(128);not null;"`
+	Picture     string    `gorm:"type:varchar(256);not null;"`
+	Price       uint      `gorm:"not null;"`
+	IsArchive   bool      `gorm:"not null;default:false;"`
+	CreatedAt   time.Time `gorm:"not null;autoCreateTime;"`
+	UpdatedAt   time.Time `gorm:"not null;autoUpdateTime;"`
+}
 
 // Note : IsArchive is used to soft delete. It doesn't actually delete the data from the database. for recovered
