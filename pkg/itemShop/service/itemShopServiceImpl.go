@@ -1,6 +1,7 @@
 package service
 
 import (
+	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Celesca/isekai-shop-api/pkg/itemShop/repository"
 )
 
@@ -11,4 +12,18 @@ type itemShopServiceImpl struct {
 func NewItemShopServiceImpl(
 	itemShopRepository _itemShopRepository.ItemShopRepository) ItemShopService {
 	return &itemShopServiceImpl{itemShopRepository}
+}
+
+func (s *itemShopServiceImpl) Listing() ([]*_itemShopModel.Item, error) {
+	itemList, err := s.itemShopRepository.Listing()
+	if err != nil {
+		return nil, err
+	}
+
+	itemModelList := make([]*_itemShopModel.Item, 0)
+	for _, item := range itemList {
+		itemModelList = append(itemModelList, item.ToItemModel())
+	}
+
+	return itemModelList, nil
 }
