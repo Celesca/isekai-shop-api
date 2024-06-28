@@ -28,7 +28,7 @@ func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
 
 	}
 
-	itemModelList, err := c.itemShopService.Listing()
+	itemModelList, err := c.itemShopService.Listing(itemFilter)
 	if err != nil {
 		return custom.Error(pctx, http.StatusInternalServerError, err.Error())
 	}
