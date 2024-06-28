@@ -5,6 +5,7 @@ import (
 
 	"github.com/Celesca/isekai-shop-api/pkg/custom"
 
+	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
 	_itemShopService "github.com/Celesca/isekai-shop-api/pkg/itemShop/service"
 	"github.com/labstack/echo/v4"
 )
@@ -18,6 +19,12 @@ func NewItemShopControllerImpl(itemShopService _itemShopService.ItemShopService)
 }
 
 func (c *itemShopControllerImpl) Listing(pctx echo.Context) error {
+	// itemFilter := new(_itemShopModel.ItemFilter)
+
+	// if err := pctx.Bind(itemFilter); err != nil {
+	// 	return custom.Error(pctx, http.StatusBadRequest, err.Error())
+	// }
+
 	itemModelList, err := c.itemShopService.Listing()
 	if err != nil {
 		return custom.Error(pctx, http.StatusInternalServerError, err.Error())
