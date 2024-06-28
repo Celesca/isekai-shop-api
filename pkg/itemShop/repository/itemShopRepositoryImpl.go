@@ -63,7 +63,7 @@ func (r *itemShopRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter)
 	var count int64
 
 	if err := query.Count(&count).Error; err != nil {
-		r.logger.Errorf("Failed to list items: %s", err.Error())
+		r.logger.Errorf("Counting item failed: %s", err.Error())
 		return -1, &_itemShopException.ItemCounting{}
 	}
 

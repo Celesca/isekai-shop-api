@@ -14,8 +14,13 @@ func NewItemShopServiceImpl(
 	return &itemShopServiceImpl{itemShopRepository}
 }
 
-func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*_itemShopModel.Item, error) {
+func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_itemShopModel.ItemResult, error) {
 	itemList, err := s.itemShopRepository.Listing(itemFilter)
+	if err != nil {
+		return nil, err
+	}
+
+	itemCounting, err := s.itemShopRepository.Counting(itemFilter)
 	if err != nil {
 		return nil, err
 	}
@@ -26,4 +31,13 @@ func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]
 	}
 
 	return itemModelList, nil
+}
+
+// function to calculate total page
+func (s *itemShopServiceImpl) totalPageCalculation(totalItems int64, size int64) int64 {
+	totalPage := totalItems / size
+
+	if totalItems%size != 0 {
+		totalPage++
+	}
 }
