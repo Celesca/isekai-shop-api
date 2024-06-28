@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/Celesca/isekai-shop-api/entities"
 	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
 	_itemShopRepository "github.com/Celesca/isekai-shop-api/pkg/itemShop/repository"
 )
@@ -25,12 +26,11 @@ func (s *itemShopServiceImpl) Listing(itemFilter *_itemShopModel.ItemFilter) (*_
 		return nil, err
 	}
 
-	itemModelList := make([]*_itemShopModel.Item, 0)
-	for _, item := range itemList {
-		itemModelList = append(itemModelList, item.ToItemModel())
-	}
+	totalPage := s.totalPageCalculation(itemCounting, itemFilter.Size)
 
-	return itemModelList, nil
+	result := s.toItemResultResponse(itemList, itemFilter.Page, totalPage)
+
+	return result, nil
 }
 
 // function to calculate total page
@@ -39,5 +39,26 @@ func (s *itemShopServiceImpl) totalPageCalculation(totalItems int64, size int64)
 
 	if totalItems%size != 0 {
 		totalPage++
+	}
+
+	return totalPage
+}
+
+//
+
+func (s *itemShopServiceImpl) toItemResultResponse(itemEntityList []*entities.Item, page, totalPage int64) *_itemShopModel.ItemResult {
+
+	itemModelList := make([]*_itemShopModel.Item, 0)
+
+	for _, item := range itemEntityList {
+		itemModelList = append(itemModelList, item.ToItemModel())
+	}
+
+	return &_itemShopModel.ItemResult{
+		Items: itemModelList,
+		Paginate: _itemShopModel.PaginateResult{
+			Page:      page,
+			TotalPage: totalPage,
+		},
 	}
 }
