@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	_itemShopException "github.com/Celesca/isekai-shop-api/pkg/itemShop/exception"
+	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
 )
 
 type itemShopRepositoryImpl struct {
@@ -17,7 +18,7 @@ func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopReposito
 	return &itemShopRepositoryImpl{db, logger}
 }
 
-func (r *itemShopRepositoryImpl) Listing() ([]*entities.Item, error) {
+func (r *itemShopRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
 	itemList := make([]*entities.Item, 0)
 
 	if err := r.db.Find(&itemList).Error; err != nil {
