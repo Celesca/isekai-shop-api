@@ -48,8 +48,7 @@ func (r *itemShopRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) 
 	return itemList, nil
 }
 
-func (r *itemShopRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
-	itemList := make([]*entities.Item, 0)
+func (r *itemShopRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter) (int64, error) {
 
 	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false) // select * from items
 
@@ -65,8 +64,8 @@ func (r *itemShopRepositoryImpl) Counting(itemFilter *_itemShopModel.ItemFilter)
 
 	if err := query.Count(&count).Error; err != nil {
 		r.logger.Errorf("Failed to list items: %s", err.Error())
-		return nil, &_itemShopException.ItemListing{}
+		return -1, &_itemShopException.ItemCounting{}
 	}
 
-	return itemList, nil
+	return count, nil
 }
