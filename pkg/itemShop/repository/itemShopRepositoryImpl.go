@@ -21,7 +21,7 @@ func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopReposito
 func (r *itemShopRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) ([]*entities.Item, error) {
 	itemList := make([]*entities.Item, 0)
 
-	query := r.db.Model(&entities.Item{}) // select * from items
+	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false) // select * from items
 
 	if itemFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+itemFilter.Name+"%")
@@ -30,6 +30,9 @@ func (r *itemShopRepositoryImpl) Listing(itemFilter *_itemShopModel.ItemFilter) 
 	if itemFilter.Description != "" {
 		query = query.Where("description ilike ?", "%"+itemFilter.Description+"%")
 	}
+
+	// 1 2 3 4 5 6 7 8 9 10
+	// 0       | 5        |
 
 	if err := query.Find(&itemList).Error; err != nil {
 		r.logger.Errorf("Failed to list items: %s", err.Error())
