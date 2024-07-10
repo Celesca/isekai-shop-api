@@ -70,3 +70,18 @@ func (c *itemManagingControllerImpl) getItemID(pctx echo.Context) (uint64, error
 
 	return itemIDUint64, nil
 }
+
+func (c *itemManagingControllerImpl) Archiving(pctx echo.Context) error {
+	itemID, err := c.getItemID(pctx)
+	if err != nil {
+		return custom.Error(pctx, http.StatusBadRequest, err.Error())
+
+	}
+
+	if err := c.itemManagingService.Archiving(itemID); err != nil {
+		return custom.Error(pctx, http.StatusInternalServerError, err.Error())
+	}
+
+	return pctx.NoContent(http.StatusNoContent)
+
+}
