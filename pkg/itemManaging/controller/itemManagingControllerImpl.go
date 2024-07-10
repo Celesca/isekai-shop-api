@@ -37,11 +37,11 @@ func (c *itemManagingControllerImpl) Creating(pctx echo.Context) error {
 	return pctx.JSON(http.StatusCreated, item)
 }
 
-func (c *itemManagingControllerImp) Editing(pctx echo.Context) error {
+func (c *itemManagingControllerImpl) Editing(pctx echo.Context) error {
 	itemID, err := c.getItemID(pctx)
 	if err != nil {
 		return custom.Error(pctx, http.StatusBadRequest, err.Error())
-	
+
 	}
 
 	itemEditingReq := new(_itemManagingModel.ItemEditingReq)
