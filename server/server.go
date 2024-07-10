@@ -11,16 +11,16 @@ import (
 	"time"
 
 	"github.com/Celesca/isekai-shop-api/config"
+	"github.com/Celesca/isekai-shop-api/databases"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"gorm.io/gorm"
 )
 
 // ไม่มีการ mock server จึงใช้เป็น struct ได้เลย
 type echoServer struct {
 	app  *echo.Echo
-	db   *gorm.DB
+	db   databases.Database
 	conf *config.Config
 }
 
@@ -29,7 +29,7 @@ var (
 	server *echoServer
 )
 
-func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
+func NewEchoServer(conf *config.Config, db databases.Database) *echoServer {
 	echoApp := echo.New()
 	// Logger - เราแสดง Level ที่มันต่ำสุดและไล่ลงไปเรื่อยๆ ดังนั้นมันโชว์ได้ตั้งแต่ DEBUG ถึง fatalLevel
 	echoApp.Logger.SetLevel(log.DEBUG)
@@ -61,6 +61,7 @@ func (s *echoServer) Start() {
 	s.app.GET("/v1/health", s.healthCheck)
 
 	s.initItemShopRouter()
+	s.initItemManagingRouter()
 
 	quitCh := make(chan os.Signal, 1)
 
