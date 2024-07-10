@@ -19,4 +19,5 @@ func (s *echoServer) initItemManagingRouter() {
 	itemManagingController := _itemManagingController.NewItemManagingControllerImpl(itemManagingService)
 
 	router.POST("", itemManagingController.Creating)
+	router.PATCH("/:itemID", itemManagingController.Editing)
 }
