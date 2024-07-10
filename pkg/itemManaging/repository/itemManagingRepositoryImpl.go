@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/Celesca/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -25,10 +27,12 @@ func (r *itemManagingRepositoryImpl) Creating(itemEntity *entities.Item) (*entit
 	// allocate new item to return
 	item := new(entities.Item)
 
-	if err := r.db.Create(itemEntity).Error; err != nil {
-		r.logger.Errorf("Creating item failed: %v", err)
+	if err := r.db.Create(itemEntity).Scan(item).Error; err != nil {
+		r.logger.Errorf("Creating item failed: %s", err.Error())
 		return nil, &_itemManagingException.ItemCreating{}
 	}
+
+	fmt.Print(item)
 
 	return item, nil
 }
