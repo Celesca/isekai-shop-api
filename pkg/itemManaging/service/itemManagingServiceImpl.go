@@ -5,15 +5,18 @@ import (
 	_itemManagingModel "github.com/Celesca/isekai-shop-api/pkg/itemManaging/model"
 	_itemManagingRepository "github.com/Celesca/isekai-shop-api/pkg/itemManaging/repository"
 	_itemShopModel "github.com/Celesca/isekai-shop-api/pkg/itemShop/model"
+	_itemShopRepository "github.com/Celesca/isekai-shop-api/pkg/itemShop/repository"
 )
 
 type itemManagingServiceImpl struct {
 	itemManagingRepository _itemManagingRepository.ItemManagingRepository
+	itemShopRepository     _itemShopRepository.ItemShopRepository
 }
 
 func NewItemManagingServiceImpl(
 	itemManagingRepository _itemManagingRepository.ItemManagingRepository,
-	itemShopRepository _itemManagingRepository.ItemShopRepository,
+	itemShopRepository _itemShopRepository.ItemShopRepository,
+
 ) ItemManagingService {
 	return &itemManagingServiceImpl{
 		itemManagingRepository,
@@ -39,7 +42,12 @@ func (s *itemManagingServiceImpl) Creating(itemCreatingReq *_itemManagingModel.I
 }
 
 func (s *itemManagingServiceImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
-	itemEntityResult, err := s.itemManagingRepository.Editing(itemID, itemEditingReq)
+	_, err := s.itemManagingRepository.Editing(itemID, itemEditingReq)
+	if err != nil {
+		return nil, err
+	}
+
+	itemEntityResult, err := s.itemShopRepository.FindByID(itemID)
 	if err != nil {
 		return nil, err
 	}
