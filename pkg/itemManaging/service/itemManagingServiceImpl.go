@@ -13,8 +13,12 @@ type itemManagingServiceImpl struct {
 
 func NewItemManagingServiceImpl(
 	itemManagingRepository _itemManagingRepository.ItemManagingRepository,
+	itemShopRepository _itemManagingRepository.ItemShopRepository,
 ) ItemManagingService {
-	return &itemManagingServiceImpl{itemManagingRepository}
+	return &itemManagingServiceImpl{
+		itemManagingRepository,
+		itemShopRepository,
+	}
 }
 
 func (s *itemManagingServiceImpl) Creating(itemCreatingReq *_itemManagingModel.ItemCreatingReq) (*_itemShopModel.Item, error) {
@@ -27,6 +31,15 @@ func (s *itemManagingServiceImpl) Creating(itemCreatingReq *_itemManagingModel.I
 	}
 
 	itemEntityResult, err := s.itemManagingRepository.Creating(itemEntity)
+	if err != nil {
+		return nil, err
+	}
+
+	return itemEntityResult.ToItemModel(), nil
+}
+
+func (s *itemManagingServiceImpl) Editing(itemID uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (*_itemShopModel.Item, error) {
+	itemEntityResult, err := s.itemManagingRepository.Editing(itemID, itemEditingReq)
 	if err != nil {
 		return nil, err
 	}
