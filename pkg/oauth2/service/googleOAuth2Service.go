@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/Celesca/isekai-shop-api/entities"
 	_adminRepository "github.com/Celesca/isekai-shop-api/pkg/admin/repository"
 	_playerRepository "github.com/Celesca/isekai-shop-api/pkg/player/repository"
 
@@ -24,6 +25,17 @@ func NewGoogleOAuth2Service(
 }
 
 func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.PlayerCreatingReq) error {
+	playerEntity := &entities.Player{
+		ID:     playerCreatingReq.ID,
+		Name:   playerCreatingReq.Name,
+		Email:  playerCreatingReq.Email,
+		Avatar: playerCreatingReq.Avatar,
+	}
+
+	if _, err := s.playerRepository.Creating(playerEntity); err != nil {
+		return err
+	}
+
 	return nil
 }
 
