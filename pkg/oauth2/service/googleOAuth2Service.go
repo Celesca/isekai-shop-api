@@ -3,6 +3,9 @@ package service
 import (
 	_adminRepository "github.com/Celesca/isekai-shop-api/pkg/admin/repository"
 	_playerRepository "github.com/Celesca/isekai-shop-api/pkg/player/repository"
+
+	_adminModel "github.com/Celesca/isekai-shop-api/pkg/admin/model"
+	_playerModel "github.com/Celesca/isekai-shop-api/pkg/player/model"
 )
 
 type googleOAuth2Service struct {
@@ -18,4 +21,12 @@ func NewGoogleOAuth2Service(
 		playerRepository,
 		adminRepository,
 	}
+}
+
+func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.PlayerCreatingReq) error {
+	return nil
+}
+
+func (s *googleOAuth2Service) AdminAccountCreating(adminCreatingReq *_adminModel.AdminCreatingReq) error {
+	return nil
 }
