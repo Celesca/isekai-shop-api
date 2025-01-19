@@ -44,6 +44,21 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 }
 
 func (s *googleOAuth2Service) AdminAccountCreating(adminCreatingReq *_adminModel.AdminCreatingReq) error {
+	if !s.IsThisGuyIsReallyAdmin(adminCreatingReq.ID) {
+
+		adminEntity := &entities.Player{
+			ID:     adminCreatingReq.ID,
+			Name:   adminCreatingReq.Name,
+			Email:  adminCreatingReq.Email,
+			Avatar: adminCreatingReq.Avatar,
+		}
+
+		if _, err := s.playerRepository.Creating(adminEntity); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
