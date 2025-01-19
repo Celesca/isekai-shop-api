@@ -25,15 +25,19 @@ func NewGoogleOAuth2Service(
 }
 
 func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerModel.PlayerCreatingReq) error {
-	playerEntity := &entities.Player{
-		ID:     playerCreatingReq.ID,
-		Name:   playerCreatingReq.Name,
-		Email:  playerCreatingReq.Email,
-		Avatar: playerCreatingReq.Avatar,
-	}
+	if !s.IsThisGuyIsReallyPlayer(playerCreatingReq.ID) {
 
-	if _, err := s.playerRepository.Creating(playerEntity); err != nil {
-		return err
+		playerEntity := &entities.Player{
+			ID:     playerCreatingReq.ID,
+			Name:   playerCreatingReq.Name,
+			Email:  playerCreatingReq.Email,
+			Avatar: playerCreatingReq.Avatar,
+		}
+
+		if _, err := s.playerRepository.Creating(playerEntity); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -51,7 +55,7 @@ func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(playerID string) bool {
 	return player != nil
 }
 
-func (s *googleOAuth2Service) isThisGuyIsReallyAdmin(adminID string) bool {
+func (s *googleOAuth2Service) IsThisGuyIsReallyAdmin(adminID string) bool {
 	admin, err := s.adminRepository.FindByID(adminID)
 	if err != nil {
 		return false
