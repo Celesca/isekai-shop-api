@@ -42,3 +42,19 @@ func (s *googleOAuth2Service) PlayerAccountCreating(playerCreatingReq *_playerMo
 func (s *googleOAuth2Service) AdminAccountCreating(adminCreatingReq *_adminModel.AdminCreatingReq) error {
 	return nil
 }
+
+func (s *googleOAuth2Service) isPlayerIsExists(playerID string) bool {
+	player, err := s.playerRepository.FindByID(playerID)
+	if err != nil {
+		return false
+	}
+	return player != nil
+}
+
+func (s *googleOAuth2Service) isAdminIsExists(adminID string) bool {
+	admin, err := s.adminRepository.FindByID(adminID)
+	if err != nil {
+		return false
+	}
+	return admin != nil
+}
