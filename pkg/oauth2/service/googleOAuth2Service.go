@@ -43,7 +43,7 @@ func (s *googleOAuth2Service) AdminAccountCreating(adminCreatingReq *_adminModel
 	return nil
 }
 
-func (s *googleOAuth2Service) isPlayerIsExists(playerID string) bool {
+func (s *googleOAuth2Service) IsThisGuyIsReallyPlayer(playerID string) bool {
 	player, err := s.playerRepository.FindByID(playerID)
 	if err != nil {
 		return false
@@ -51,7 +51,7 @@ func (s *googleOAuth2Service) isPlayerIsExists(playerID string) bool {
 	return player != nil
 }
 
-func (s *googleOAuth2Service) isAdminIsExists(adminID string) bool {
+func (s *googleOAuth2Service) isThisGuyIsReallyAdmin(adminID string) bool {
 	admin, err := s.adminRepository.FindByID(adminID)
 	if err != nil {
 		return false
