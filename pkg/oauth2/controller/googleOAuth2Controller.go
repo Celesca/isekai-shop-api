@@ -33,6 +33,9 @@ func NewGoogleOAuth2Controller(
 	oauth2Conf *config.OAuth2,
 	logger echo.Logger,
 ) OAuth2Controller {
+	once.Do(func() { // Singleton
+		setGoogleOAuth2Config(oauth2Conf)
+	})
 	return &googleOAuth2Controller{
 		oauth2Service,
 		oauth2Conf,
